@@ -9,29 +9,14 @@ namespace FullTextSearch
     class Program
     {
 
-        static List<string> ReadFileContent(FileReader reader, string file)
-        {
-            string content = reader.ReadAllSpecificFileContent(file);
-            return TextProcessor.Spilit(content);
-        }
-        static List<string> ProcessWords(List<string> rawWords)
-        {
-            List<string> allWords = new List<string>();
-            foreach (string word in rawWords)
-            {
-                allWords.Add(TextProcessor.CleanWord(word));
-            }
+        
+      
 
-            allWords = TextProcessor.DeleteStopWords(allWords);
-            allWords = TextProcessor.WordStiming(allWords);
-
-            return allWords;
-        }
-
-        static void ProcessFile(FileReader dataReader, string file, ref Dictionary<string, List<string>> invertedIndex)
+        static void ProcessFile(string file)
         {
-            List<string> rawWords = ReadFileContent(dataReader, file);
-            List<string> processedWords = ProcessWords(rawWords);
+            FileReader dataReader = new FileReader("/home/mohammad/dotnet/full-text-search/search_data/data/EnglishData");
+            List<string> rawWords = dataReader.ReadFileContent(file);
+            List<string> processedWords = TextProcessor.ProcessWords(rawWords);
             InvertedIndexBuilder builder = new InvertedIndexBuilder();
             builder.BuildInvertedIndex(processedWords, file);
         }
@@ -86,7 +71,7 @@ namespace FullTextSearch
             FileReader dataReader = new FileReader("/home/mohammad/dotnet/full-text-search/search_data/data/EnglishData");
             foreach (string file in dataReader.GetDirectoryFiles())
             {
-                ProcessFile(dataReader, file, ref invertedIndex);
+                ProcessFile(file);
             }
 
             List<string> inputWords = ClientRequestProcess();
@@ -94,16 +79,6 @@ namespace FullTextSearch
             HashSet<string> result = ProcessQueryParts(inputWords, invertedIndex);
 
             GetOutput(result);
-
-
-
-
-
-
-
-
-
-
         }
     }
 }

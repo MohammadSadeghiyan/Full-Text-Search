@@ -20,7 +20,7 @@ public class TextProcessor
 
     public static List<string> DeleteStopWords(List<string> allWords)
     {
-        List<string> stopWords = new List<string> { "THE","I", "WE", "YOU", "HE", "SHE", "IT", "THEY", "ME", "HIM", "HER", "US", "THEM" };
+        List<string> stopWords = new List<string> { "THE", "I", "WE", "YOU", "HE", "SHE", "IT", "THEY", "ME", "HIM", "HER", "US", "THEM" };
 
         List<string> filteredWords = new List<string>();
         foreach (string word in allWords)
@@ -53,6 +53,20 @@ public class TextProcessor
 
         return stemmer.Stem(word).Value;
 
+    }
+    
+    public static List<string> ProcessWords(List<string> rawWords)
+    {
+        List<string> allWords = new List<string>();
+        foreach (string word in rawWords)
+        {
+            allWords.Add(TextProcessor.CleanWord(word));
+        }
+
+        allWords = TextProcessor.DeleteStopWords(allWords);
+        allWords = TextProcessor.WordStiming(allWords);
+
+        return allWords;
     }
 
 }

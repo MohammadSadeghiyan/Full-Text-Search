@@ -1,4 +1,5 @@
-﻿namespace InvertedIndex.IO;
+﻿using InvertedIndex.Processing;
+namespace InvertedIndex.IO;
 
 public class FileReader
 {
@@ -26,5 +27,11 @@ public class FileReader
     {
         return File.ReadAllText(file);
     }
-    
+
+    public  List<string> ReadFileContent(string file)
+    {
+        string content = ReadAllSpecificFileContent(file);
+        return TextProcessor.Spilit(content);
+    }
+
 }
