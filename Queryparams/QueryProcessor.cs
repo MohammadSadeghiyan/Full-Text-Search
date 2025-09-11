@@ -14,22 +14,21 @@ public class QueryProcessor
     private void ProcessPart(QueryContext context, string part)
     {
         string key = part.StartsWith("+") || part.StartsWith('-') ? part.Substring(1) : part;
-       
-        if (part.StartsWith("+"))
+        if (_invertedIndex.ContainsKey(key))
         {
-            if (_invertedIndex.ContainsKey(key))
+             if (part.StartsWith("+")){
                 context.AtLeastParts.UnionWith(_invertedIndex[key]);
-        }
+            }
         else if (part.StartsWith("-"))
         {
-            if (_invertedIndex.ContainsKey(key))
                 context.ExcludeParts.UnionWith(_invertedIndex[key]);
         }
         else
         {
-            if (_invertedIndex.ContainsKey(key))
                 context.OnlyParts.UnionWith(_invertedIndex[key]);
         }
+        }
+       
     }
 
     public void ProcessAll(QueryContext context, List<string> parts)
