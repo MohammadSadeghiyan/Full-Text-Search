@@ -1,8 +1,9 @@
 ﻿using System.Text.RegularExpressions;
-using InvertedIndex;
 using InvertedIndex.IO;
 using QueryParams.Models;
 using QueryParams.Services;
+using InvertedIndex.Processing;
+using InvertedIndex.Indexing;
 namespace FullTextSearch
 {
     class Program
@@ -11,18 +12,18 @@ namespace FullTextSearch
         static List<string> ReadFileContent(FileReader reader, string file)
         {
             string content = reader.ReadAllSpecificFileContent(file);
-            return InvertedIndexProcess.Spilit(content);
+            return TextProcessor.Spilit(content);
         }
         static List<string> ProcessWords(List<string> rawWords)
         {
             List<string> allWords = new List<string>();
             foreach (string word in rawWords)
             {
-                allWords.Add(InvertedIndexProcess.CleanWord(word));
+                allWords.Add(TextProcessor.CleanWord(word));
             }
 
-            allWords = InvertedIndexProcess.DeleteStopWords(allWords);
-            allWords = InvertedIndexProcess.WordStiming(allWords);
+            allWords = TextProcessor.DeleteStopWords(allWords);
+            allWords = TextProcessor.WordStiming(allWords);
 
             return allWords;
         }
@@ -31,7 +32,8 @@ namespace FullTextSearch
         {
             List<string> rawWords = ReadFileContent(dataReader, file);
             List<string> processedWords = ProcessWords(rawWords);
-            InvertedIndexProcess.BuildInvertedIndex(ref invertedIndex, processedWords, file);
+            InvertedIndexBuilder builder = new InvertedIndexBuilder();
+            builder.BuildInvertedIndex(processedWords, file);
         }
 
         static void MessageShowToHelpClientRequest()
@@ -63,7 +65,7 @@ namespace FullTextSearch
         static HashSet<string> ProcessQueryParts(List<string> inputWords, Dictionary<string, List<string>> invertedIndex)
         {
             QueryContext request = new QueryContext();
-            List<string> allParts = InvertedIndexProcess.WordStiming(inputWords);
+            List<string> allParts = TextProcessor.WordStiming(inputWords);
 
             QueryProcessor processor = new QueryProcessor(invertedIndex);
             processor.ProcessAll(request, allParts);

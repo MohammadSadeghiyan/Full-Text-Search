@@ -1,13 +1,9 @@
-﻿using System.IO;
+
 using System.Text.RegularExpressions;
 using Porter2Stemmer;
-using System;
-using System.Runtime.InteropServices;
-using System.Runtime.CompilerServices;
-namespace InvertedIndex;
+namespace InvertedIndex.Processing;
 
-
-public class InvertedIndexProcess
+public class TextProcessor
 {
     public static List<string> Spilit(string content)
     {
@@ -24,7 +20,7 @@ public class InvertedIndexProcess
 
     public static List<string> DeleteStopWords(List<string> allWords)
     {
-        List<string> stopWords = new List<string> { "I", "WE", "YOU", "HE", "SHE", "IT", "THEY", "ME", "HIM", "HER", "US", "THEM" };
+        List<string> stopWords = new List<string> { "THE","I", "WE", "YOU", "HE", "SHE", "IT", "THEY", "ME", "HIM", "HER", "US", "THEM" };
 
         List<string> filteredWords = new List<string>();
         foreach (string word in allWords)
@@ -58,19 +54,5 @@ public class InvertedIndexProcess
         return stemmer.Stem(word).Value;
 
     }
-    public static void BuildInvertedIndex(ref Dictionary<string, List<string>> invertedIndex, List<string> allWord, string fileName)
-    {
-        foreach (var word in allWord)
-        {
-            if (invertedIndex.ContainsKey(word))
-            {
-                if (!invertedIndex[word].Contains(fileName))
-                    invertedIndex[word].Add(fileName);
-            }
-            else
-            {
-                invertedIndex.Add(word, new List<string> { fileName });
-            }
-        }
-    }
+
 }
