@@ -1,24 +1,36 @@
-# Build results
+## Visual Studio / .NET
+.vs/
 bin/
 obj/
-*.dll
-*.exe
-*.app
+Debug/
+Release/
+TestResults/
 
-# User-specific files
+## Rider
+.idea/
+
+## User-specific files
 *.user
 *.suo
 *.userosscache
 *.sln.docstates
 
-# Rider/VSCode
-.idea/
-.vscode/
-
-# NuGet packages
+## NuGet
 *.nupkg
 packages/
+project.lock.json
+project.fragment.lock.json
+artifacts/
 
-# Others
+## ASP.NET / IIS
+*.vspscc
+*.vssscc
+*.webtest
+
+## Others
 *.log
 *.vs/
+*.DS_Store
+
+## Ignore specific folder 
+search_data/

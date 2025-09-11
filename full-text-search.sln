@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "console", "console\console.csproj", "{30238290-FA86-42FD-8125-7A128202F2D9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InvertedIndex", "InvertedIndex\InvertedIndex.csproj", "{CDCD733D-4713-473F-88E8-49ABC81ACB16}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{30238290-FA86-42FD-8125-7A128202F2D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{30238290-FA86-42FD-8125-7A128202F2D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{30238290-FA86-42FD-8125-7A128202F2D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{30238290-FA86-42FD-8125-7A128202F2D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{80D298B6-62F9-427D-A7CC-016DCDC5C88B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80D298B6-62F9-427D-A7CC-016DCDC5C88B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80D298B6-62F9-427D-A7CC-016DCDC5C88B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80D298B6-62F9-427D-A7CC-016DCDC5C88B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CDCD733D-4713-473F-88E8-49ABC81ACB16}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CDCD733D-4713-473F-88E8-49ABC81ACB16}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CDCD733D-4713-473F-88E8-49ABC81ACB16}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CDCD733D-4713-473F-88E8-49ABC81ACB16}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
