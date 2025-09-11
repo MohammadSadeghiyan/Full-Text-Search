@@ -3,6 +3,8 @@
   
   <ItemGroup>
     <ProjectReference Include="..\InvertedIndex\InvertedIndex.csproj" />
+    <ProjectReference Include="..\FileReader\FileReader.csproj" />
+    <ProjectReference Include="..\Queryparams\Queryparams.csproj" />
   </ItemGroup>
 
   

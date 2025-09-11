@@ -1,80 +1,99 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-using System.Reflection.Metadata;
-using System.Runtime.InteropServices;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using InvertedIndex;
+using InvertedIndex.IO;
+using QueryParams.Models;
+using QueryParams.Services;
 namespace FullTextSearch
 {
     class Program
     {
-        static void Main(string[] args)
+
+        static List<string> ReadFileContent(FileReader reader, string file)
         {
-            Dictionary<string, List<string>> invertedIndex = new Dictionary<string, List<string>>();
-            string folderPath = "/home/mohammad/dotnet/full-text-search/search_data/data/EnglishData";
-            string[] files = Directory.GetFiles(folderPath);
-            string content;
-            List<string> allWord = new List<string>();
-            foreach (string file in files)
+            string content = reader.ReadAllSpecificFileContent(file);
+            return InvertedIndexProcess.Spilit(content);
+        }
+        static List<string> ProcessWords(List<string> rawWords)
+        {
+            List<string> allWords = new List<string>();
+            foreach (string word in rawWords)
             {
-                //read file
-                content = File.ReadAllText(file);
-                List<string> rawWords = Tokenization.Spilit(content);
-                //tokenization
-                foreach (string word in rawWords)
-                {
-                    allWord.Add(Tokenization.CleanWord(word));
-
-                }
-
-                allWord = Tokenization.DeleteStopWords(allWord);
-
-                allWord = Tokenization.WordStiming(allWord);
-
-                Tokenization.BuildInvertedIndex(ref invertedIndex, allWord, file);
-                allWord.Clear();
+                allWords.Add(InvertedIndexProcess.CleanWord(word));
             }
 
+            allWords = InvertedIndexProcess.DeleteStopWords(allWords);
+            allWords = InvertedIndexProcess.WordStiming(allWords);
+
+            return allWords;
+        }
+
+        static void ProcessFile(FileReader dataReader, string file, ref Dictionary<string, List<string>> invertedIndex)
+        {
+            List<string> rawWords = ReadFileContent(dataReader, file);
+            List<string> processedWords = ProcessWords(rawWords);
+            InvertedIndexProcess.BuildInvertedIndex(ref invertedIndex, processedWords, file);
+        }
+
+        static void MessageShowToHelpClientRequest()
+        {           
             Console.Write("please enter your string that you want to make full text search on it (hey):");
-            string input = Console.ReadLine();
-            List<string> parts = Regex.Split(input, @"\s+").ToList();
 
-            HashSet<string> onlyParts = new HashSet<string>();
-            HashSet<string> excludeParts = new HashSet<string>();
-            HashSet<string> atLeastParts = new HashSet<string>();
-            List<string> allParts = Tokenization.WordStiming(parts);
+            
+        }
+        static string GetInputRequest()
+        {
+            return  Console.ReadLine();
 
-            foreach (var part in allParts)
-            {
-                if (part.StartsWith("+"))
-                {
-                    string key = part.Substring(1);
-                    if (invertedIndex.ContainsKey(key))
-                        atLeastParts.UnionWith(invertedIndex[key]);
-                }
-                else if (part.StartsWith("-"))
-                {
-                    string key = part.Substring(1);
-                    if (invertedIndex.ContainsKey(key))
-                        excludeParts.UnionWith(invertedIndex[key]);
-                }
-                else
-                {
-                    string key = part;
-                    if (invertedIndex.ContainsKey(key))
-                        onlyParts.UnionWith(invertedIndex[key]);
-                }
-            }
+        }
+
+        static List<string>SplitRequestInput(string input)
+        {
+            return Regex.Split(input, @"\s+").ToList();
+
+        }
+        static List<string> ClientRequestProcess()
+        {
+            MessageShowToHelpClientRequest();
+            string input=GetInputRequest();
+            return SplitRequestInput(input);
+        }
 
 
-            onlyParts.ExceptWith(excludeParts);
-            if (atLeastParts.Count > 0)
-                onlyParts.IntersectWith(atLeastParts);
 
-            foreach (var doc in onlyParts)
+        static HashSet<string> ProcessQueryParts(List<string> inputWords, Dictionary<string, List<string>> invertedIndex)
+        {
+            QueryContext request = new QueryContext();
+            List<string> allParts = InvertedIndexProcess.WordStiming(inputWords);
+
+            QueryProcessor processor = new QueryProcessor(invertedIndex);
+            processor.ProcessAll(request, allParts);
+            return request.OnlyParts;
+        }
+
+        static void GetOutput(HashSet<string> result)
+        {
+            foreach (var doc in result)
             {
                 Console.WriteLine(doc);
             }
+        }
+        
+        static void Main(string[] args)
+        {
+            Dictionary<string, List<string>> invertedIndex = new Dictionary<string, List<string>>();
+            FileReader dataReader = new FileReader("/home/mohammad/dotnet/full-text-search/search_data/data/EnglishData");
+            foreach (string file in dataReader.GetDirectoryFiles())
+            {
+                ProcessFile(dataReader, file, ref invertedIndex);
+            }
+
+            List<string> inputWords = ClientRequestProcess();
+
+            HashSet<string> result = ProcessQueryParts(inputWords, invertedIndex);
+
+            GetOutput(result);
+
+
 
 
 
