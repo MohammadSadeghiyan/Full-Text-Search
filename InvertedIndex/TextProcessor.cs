@@ -60,11 +60,11 @@ public class TextProcessor
         List<string> allWords = new List<string>();
         foreach (string word in rawWords)
         {
-            allWords.Add(TextProcessor.CleanWord(word));
+            allWords.Add(CleanWord(word));
         }
 
-        allWords = TextProcessor.DeleteStopWords(allWords);
-        allWords = TextProcessor.WordStiming(allWords);
+        allWords = DeleteStopWords(allWords);
+        allWords = WordStiming(allWords);
 
         return allWords;
     }

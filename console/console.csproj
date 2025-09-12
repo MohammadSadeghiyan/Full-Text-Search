@@ -5,6 +5,7 @@
     <ProjectReference Include="..\InvertedIndex\InvertedIndex.csproj" />
     <ProjectReference Include="..\FileReader\FileReader.csproj" />
     <ProjectReference Include="..\Queryparams\Queryparams.csproj" />
+    <ProjectReference Include="..\Request\Request.csproj" />
   </ItemGroup>
 
   

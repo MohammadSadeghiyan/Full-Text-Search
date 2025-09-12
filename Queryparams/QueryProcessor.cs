@@ -1,5 +1,5 @@
 using QueryParams.Models;
-
+using InvertedIndex.Processing;
 namespace QueryParams.Services;
 
 public class QueryProcessor
@@ -16,19 +16,20 @@ public class QueryProcessor
         string key = part.StartsWith("+") || part.StartsWith('-') ? part.Substring(1) : part;
         if (_invertedIndex.ContainsKey(key))
         {
-             if (part.StartsWith("+")){
+            if (part.StartsWith("+"))
+            {
                 context.AtLeastParts.UnionWith(_invertedIndex[key]);
             }
-        else if (part.StartsWith("-"))
-        {
+            else if (part.StartsWith("-"))
+            {
                 context.ExcludeParts.UnionWith(_invertedIndex[key]);
-        }
-        else
-        {
+            }
+            else
+            {
                 context.OnlyParts.UnionWith(_invertedIndex[key]);
+            }
         }
-        }
-       
+
     }
 
     public void ProcessAll(QueryContext context, List<string> parts)
@@ -39,8 +40,17 @@ public class QueryProcessor
         }
         context.OnlyParts.ExceptWith(context.ExcludeParts);
         if (context.AtLeastParts.Count > 0)
-        context.OnlyParts.IntersectWith(context.AtLeastParts);
+            context.OnlyParts.IntersectWith(context.AtLeastParts);
 
     }
+    
+    public HashSet<string> ProcessQueryParts(List<string> inputWords)
+        {
+            QueryContext request = new QueryContext();
+            List<string> allParts = TextProcessor.WordStiming(inputWords);
+
+            ProcessAll(request, allParts);
+            return request.OnlyParts;
+        }
 }
 

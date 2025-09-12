@@ -1,5 +1,6 @@
 ﻿using InvertedIndex.Processing;
 namespace InvertedIndex.IO;
+using InvertedIndex.Indexing;
 
 public class FileReader
 {
@@ -33,5 +34,11 @@ public class FileReader
         string content = ReadAllSpecificFileContent(file);
         return TextProcessor.Spilit(content);
     }
-
+    public static void ProcessFile(string file,ref InvertedIndexBuilder builder)
+        {
+            FileReader dataReader = new FileReader("/home/mohammad/dotnet/full-text-search/search_data/data/EnglishData");
+            List<string> rawWords = dataReader.ReadFileContent(file);
+            List<string> processedWords = TextProcessor.ProcessWords(rawWords);
+            builder.BuildInvertedIndex(processedWords, file);
+        }
 }
