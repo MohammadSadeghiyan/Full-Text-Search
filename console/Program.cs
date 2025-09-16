@@ -4,6 +4,11 @@ using System.Reflection.Metadata;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using InvertedIndex;
+using FullTextSearch.Request.HelperMessage;
+using FullTextSearch.Request.GetInput;
+using FullTextSearch.Request.WordSpiliter;
+using FullTextSearch.Request.Abstractions;
+using FullTextSearch.Request.Process;
 namespace FullTextSearch
 {
     class Program
@@ -34,11 +39,14 @@ namespace FullTextSearch
                 Tokenization.BuildInvertedIndex(ref invertedIndex, allWord, file);
                 allWord.Clear();
             }
-
-            Console.Write("please enter your string that you want to make full text search on it (hey):");
-            string input = Console.ReadLine();
-            List<string> parts = Regex.Split(input, @"\s+").ToList();
-
+            //ok
+            IHelperMessage message = new ConsoleHelperMessage();
+            IGetInput input = new ConsoleGetInput();
+            InputWordSpiliter spiliter = new InputWordSpiliter();
+            InputProcessor requestInputProcessor = new InputProcessor(message,input,spiliter);
+            List<string>SpilitedWords =requestInputProcessor.Process();
+            
+        
             HashSet<string> onlyParts = new HashSet<string>();
             HashSet<string> excludeParts = new HashSet<string>();
             HashSet<string> atLeastParts = new HashSet<string>();
