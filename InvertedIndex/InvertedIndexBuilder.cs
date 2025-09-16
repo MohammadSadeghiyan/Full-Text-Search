@@ -1,28 +1,22 @@
-﻿namespace InvertedIndex.Indexing;
+﻿namespace FullTextSearch.InvertedIndex.Indexing;
 
+using FullTextSearch.InvertedIndex.Abstractions;
 
 public class InvertedIndexBuilder
 {
-    private Dictionary<string, List<string>> _invertedIndex= new();
+    private readonly IInvertedIndexStorage _storage;
 
-    public Dictionary<string, List<string>> InvertedIndex
+    public InvertedIndexBuilder(IInvertedIndexStorage storage)
     {
-        get{ return _invertedIndex; }
+        _storage = storage;
     }
-    
-    public void BuildInvertedIndex(List<string> allWord, string fileName)
+
+    public void BuildInvertedIndex(List<string> allWords, string fileName)
     {
-        foreach (var word in allWord)
+        foreach (var word in allWords)
         {
-            if (InvertedIndex!=null &&InvertedIndex.ContainsKey(word))
-            {
-                if (!InvertedIndex[word].Contains(fileName))
-                    InvertedIndex[word].Add(fileName);
-            }
-            else
-            {
-                InvertedIndex.Add(word, new List<string> { fileName });
-            }
+            _storage.Save(word, fileName);
         }
     }
+    
 }

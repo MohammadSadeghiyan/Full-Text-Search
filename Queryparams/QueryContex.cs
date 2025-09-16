@@ -1,6 +1,5 @@
-﻿using System.Security.Cryptography;
-
-namespace QueryParams.Models;
+﻿
+namespace FullTextSearch.QueryParams.Models;
 
 public class QueryContext
 {
